@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="./favicon.png" type="image/png">
+    <title>ahj-homeworks_7-http_7.2_front</title>
+</head>
+<body>
+    <div class="container">
+        <div class="tickets bg-light p-5">
+            <div class="tickets-header row mb-3">
+                <div class="col d-flex justify-content-end">
+                    <button type="button" class="create-ticket btn btn-primary" data-bs-toggle="modal" data-bs-target="#ticketModal">Добавить тикет</button>
+                </div>
+            </div>
+            <div class="tickets-list">
+                <div class="tickets-list__in-progress">
+                    <!-- <div class="ticket row border p-3 bg-white">
+                        <div class="ticket-status col-md-1 text-center"><input class="form-check-input" type="checkbox"></div>
+                        <div class="ticket-text col-md">
+                            <div class="ticket-text__name col-md-12">Поменять краску в принтере, ком. 404</div>
+                            <div class="ticket-text__detail col-md-12 mt-2 visually-hidden">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Adipisci, aspernatur dolorum. Quos voluptatibus quis impedit minus facilis consequuntur cum. Recusandae dolore, molestias voluptas vitae quis nostrum beatae velit autem consequatur dolores. Quibusdam ducimus asperiores enim reprehenderit soluta sint aut sequi deserunt. Quisquam ratione, aliquam repellat commodi itaque ut sint minima doloribus quae omnis ea hic.</div>                            
+                        </div>
+                        <div class="ticket-date col-md-2">01.12.22 15:17</div>
+                        <div class="ticket-actions col-md-1 d-flex flex-wrap justify-content-around align-content-start">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-outline-secondary" role="group" data-bs-toggle="modal" data-bs-target="#ticketModal">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+                                        <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"/>
+                                    </svg>                                    
+                                  <span class="visually-hidden">Edit</span>
+                                </button>
+                                <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#ticketModal">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16">
+                                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                        <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                                    </svg>                                     
+                                  <span class="visually-hidden">Delete</span>
+                                </button>
+                              </div>
+                        </div>                    
+                    </div>                     -->
+                </div>               
+                <div class="tickets-list__done"></div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal fade" id="ticketModal" tabindex="-1" aria-labelledby="ticketModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="ticketModalLabel">Добавить тикет</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3">
+                          <label for="ticketName" class="form-label">Краткое описание</label>
+                          <input type="text" class="form-control" id="ticketName">
+                        </div>
+                        <div class="mb-3">
+                          <label for="ticketDescription" class="form-label">Подробное описание</label>
+                         <textarea class="form-control" id="ticketDescription" rows="3"></textarea>
+                        </div>
+                      </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                    <button type="button" class="btn btn-primary">ОК</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- <div class="modal fade" id="ticketModal" tabindex="-1" aria-labelledby="ticketModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="ticketModalLabel">Добавить тикет</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Сюда форму из двух полей
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                    <button type="button" class="btn btn-primary">ОК</button>
+                </div>
+            </div>
+        </div>
+    </div> -->
+</body>
+</html>
