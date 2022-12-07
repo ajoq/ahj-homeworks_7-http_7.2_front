@@ -12,7 +12,7 @@
         <div class="tickets bg-light p-5">
             <div class="tickets-header row mb-3">
                 <div class="col d-flex justify-content-end">
-                    <button type="button" class="create-ticket btn btn-primary" data-bs-toggle="modal" data-bs-target="#ticketModal">Добавить тикет</button>
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ticketModal" id="createTicketBtn" data-title="Добавить тикет" data-method="createTicket">Добавить тикет</button>
                 </div>
             </div>
             <div class="tickets-list">
@@ -48,32 +48,32 @@
         </div>
     </div>
     
-    <div class="modal fade" id="ticketModal" tabindex="-1" aria-labelledby="ticketModalLabel" aria-hidden="true">
+    <!-- <div class="modal fade" id="ticketModal" tabindex="-1" aria-labelledby="ticketModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="ticketModalLabel">Добавить тикет</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="closeModal"></button>
                 </div>
                 <div class="modal-body">
-                    <form>
+                    <form class="create-ticket-form">
                         <div class="mb-3">
                           <label for="ticketName" class="form-label">Краткое описание</label>
-                          <input type="text" class="form-control" id="ticketName">
+                          <input type="text" name="name" class="form-control" id="ticketName" required>
                         </div>
                         <div class="mb-3">
                           <label for="ticketDescription" class="form-label">Подробное описание</label>
-                         <textarea class="form-control" id="ticketDescription" rows="3"></textarea>
+                         <textarea class="form-control" name="description" id="ticketDescription" rows="3"></textarea>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="create-ticket-btn__cancel btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                            <button type="submit" class="create-ticket-btn__add btn btn-primary">ОК</button>
                         </div>
                       </form>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
-                    <button type="button" class="btn btn-primary">ОК</button>
-                </div>
             </div>
         </div>
-    </div>
+    </div> -->
 
     <!-- <div class="modal fade" id="ticketModal" tabindex="-1" aria-labelledby="ticketModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -92,5 +92,23 @@
             </div>
         </div>
     </div> -->
+
+    <div class="modal fade" id="ticketModal" tabindex="-1" aria-labelledby="ticketModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="ticketModalLabel"> <!-- Заголовок --> </h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="modalBody">
+                    <!-- Содержимое формы -->
+                </div>
+                <!-- <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                    <button type="button" class="btn btn-primary">ОК</button>
+                </div> -->
+            </div>
+        </div>
+    </div>  
 </body>
 </html>
