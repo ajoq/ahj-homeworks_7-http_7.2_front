@@ -35,18 +35,21 @@ export default class Tickets {
         switch(method) {
             case 'createTicket':
                 this.createTicket();
+                break;
             case 'editTicket':
-                this.editTicket();
-            // case 'deleteTicket':
-            //     this.deleteTicket();
-            //     return;                
+                this.editTicket(e);
+                break;
+            case 'deleteTicket':
+                console.log('Удаляем тикет');
+                // this.deleteTicket();
+                break;                
         }
 
         document.querySelector('.btn-close').click();
     }
 
     createTicket() {
-        console.log('Добавляем тикет');
+        // console.log('Добавляем тикет');
 
         let formData = new FormData(document.forms[0]);
         let xhr = new XMLHttpRequest();
@@ -70,8 +73,33 @@ export default class Tickets {
         });
     }
 
-    editTicket() {
-        console.log('Редактируем тикет');
+    editTicket(e) {
+        // console.log('Редактируем тикет');
+
+        const currentTicketId = e.currentTarget.dataset.ticketId;
+
+        let formData = new FormData(document.forms[0]);
+
+        formData.append('id', currentTicketId);
+
+        let xhr = new XMLHttpRequest();
+        let url = new URL('http://localhost:7070/');
+        url.searchParams.set('method', 'editTicket');
+        xhr.open('POST', url);
+        xhr.send(formData);
+
+        document.forms[0].reset();
+
+        xhr.addEventListener('load', () => {
+            if (xhr.status >= 200 && xhr.status < 300) {
+                try {
+                    const data = JSON.parse(xhr.response);
+                    this.updateList(data);
+                } catch (e) {
+                    console.error(e);
+                }              
+            }
+        });
     }
 
     getTickets() {
@@ -87,7 +115,6 @@ export default class Tickets {
                     const data = JSON.parse(xhr.response);
                     console.log(data);
                     this.updateList(data);
-                    // callback(data);
                 } catch (e) {
                     console.error(e);
                 }              
@@ -97,6 +124,7 @@ export default class Tickets {
 
     getTicketData(e) {
         const currentTicketId = e.relatedTarget.closest('.ticket').dataset.id;
+        e.target.querySelector('form').dataset.ticketId = currentTicketId;
         this.ticketById(currentTicketId, (data) => {
             const { name, description } = data;
             document.forms[0].name.value = name;
