@@ -18,9 +18,10 @@ export default class Tickets {
         this.modal.modal.addEventListener('show.bs.modal', (e) => {
             this.modal.showModal(e);
 
-            if (document.forms[0].dataset.method === 'editTicket') {
-                this.getTicketData(e);
-            }
+            const method = document.forms[0].dataset.method;
+            if (method === 'editTicket' || method === 'deleteTicket') {
+                this.getTicketData(e, method);
+            }            
 
             document.forms[0].addEventListener('submit', (e) => this.submitMethod(e));
         });
@@ -39,9 +40,8 @@ export default class Tickets {
             case 'editTicket':
                 this.editTicket(e);
                 break;
-            case 'deleteTicket':
-                console.log('Удаляем тикет');
-                // this.deleteTicket();
+            case 'deleteTicket':                
+                this.deleteTicket(e);
                 break;                
         }
 
@@ -49,7 +49,7 @@ export default class Tickets {
     }
 
     createTicket() {
-        // console.log('Добавляем тикет');
+        console.log('Добавляем тикет');
 
         let formData = new FormData(document.forms[0]);
         let xhr = new XMLHttpRequest();
@@ -73,8 +73,32 @@ export default class Tickets {
         });
     }
 
+    deleteTicket(e) {
+        console.log('Удаляем тикет');
+
+        const currentTicketId = e.currentTarget.dataset.ticketId;
+
+        let xhr = new XMLHttpRequest();
+        let url = new URL('http://localhost:7070/');
+        url.searchParams.set('method', 'deleteTicket');
+        url.searchParams.set('id', currentTicketId);
+        xhr.open('DELETE', url);
+        xhr.send();
+
+        xhr.addEventListener('load', () => {
+            if (xhr.status >= 200 && xhr.status < 300) {
+                try {
+                    const data = JSON.parse(xhr.response);
+                    this.updateList(data);
+                } catch (e) {
+                    console.error(e);
+                }              
+            }
+        });
+    }
+
     editTicket(e) {
-        // console.log('Редактируем тикет');
+        console.log('Редактируем тикет');
 
         const currentTicketId = e.currentTarget.dataset.ticketId;
 
@@ -122,15 +146,17 @@ export default class Tickets {
         });
     }
 
-    getTicketData(e) {
+    getTicketData(e, method) {
         const currentTicketId = e.relatedTarget.closest('.ticket').dataset.id;
         e.target.querySelector('form').dataset.ticketId = currentTicketId;
+
+        if (method != 'editTicket') return;
+
         this.ticketById(currentTicketId, (data) => {
             const { name, description } = data;
             document.forms[0].name.value = name;
             document.forms[0].description.value = description;
         });
-
     }
 
     ticketById(id, callback) {
