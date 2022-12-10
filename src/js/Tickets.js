@@ -25,6 +25,8 @@ export default class Tickets {
 
             document.forms[0].addEventListener('submit', (e) => this.submitMethod(e));
         });
+
+        this.ticketsList.addEventListener('click', (e) => this.showTicketDescription(e));
     }
 
     submitMethod(e) {
@@ -156,6 +158,37 @@ export default class Tickets {
             const { name, description } = data;
             document.forms[0].name.value = name;
             document.forms[0].description.value = description;
+        });
+    }
+
+    showTicketDescription(e) {
+        const ticketName = e.target.closest('.ticket-text__name');
+        if (!ticketName) return;
+
+        const currentTicket = e.target.closest('.ticket');
+
+        const detailDesc = currentTicket.querySelector('.ticket-text__detail');
+        detailDesc.classList.toggle('visually-hidden');
+
+        if (detailDesc.textContent != '') return;
+
+        const currentTicketId = currentTicket.dataset.id;
+
+        const spinner = `
+            <div class="spinner-border spinner-border-sm" role="status">
+                <span class="visually-hidden">Загрузка...</span>
+            </div>        
+        `;
+
+        detailDesc.innerHTML = spinner;
+
+
+        this.ticketById(currentTicketId, (data) => {
+            const { description } = data;
+            setTimeout(() => {
+                detailDesc.innerHTML = '';
+                detailDesc.textContent = description
+            }, 2000);
         });
     }
 
