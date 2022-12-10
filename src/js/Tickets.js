@@ -1,4 +1,3 @@
-import * as bootstrap from 'bootstrap'
 import Ticket from "./Ticket";
 import Modal from "./Modal";
 
@@ -18,6 +17,11 @@ export default class Tickets {
     events() {
         this.modal.modal.addEventListener('show.bs.modal', (e) => {
             this.modal.showModal(e);
+
+            if (document.forms[0].dataset.method === 'editTicket') {
+                this.getTicketData(e);
+            }
+
             document.forms[0].addEventListener('submit', (e) => this.submitMethod(e));
         });
     }
@@ -25,16 +29,14 @@ export default class Tickets {
     submitMethod(e) {
         e.preventDefault();
         console.log('Произошло событие submit');
-        console.log(e.target);
 
         const method = e.target.dataset.method;
 
         switch(method) {
             case 'createTicket':
                 this.createTicket();
-            // case 'editTicket':
-            //     this.createEditTicket(method);
-            //     return; 
+            case 'editTicket':
+                this.editTicket();
             // case 'deleteTicket':
             //     this.deleteTicket();
             //     return;                
@@ -68,6 +70,10 @@ export default class Tickets {
         });
     }
 
+    editTicket() {
+        console.log('Редактируем тикет');
+    }
+
     getTickets() {
         let xhr = new XMLHttpRequest();
         let url = new URL('http://localhost:7070/');
@@ -81,6 +87,37 @@ export default class Tickets {
                     const data = JSON.parse(xhr.response);
                     console.log(data);
                     this.updateList(data);
+                    // callback(data);
+                } catch (e) {
+                    console.error(e);
+                }              
+            }
+        });
+    }
+
+    getTicketData(e) {
+        const currentTicketId = e.relatedTarget.closest('.ticket').dataset.id;
+        this.ticketById(currentTicketId, (data) => {
+            const { name, description } = data;
+            document.forms[0].name.value = name;
+            document.forms[0].description.value = description;
+        });
+
+    }
+
+    ticketById(id, callback) {
+        let xhr = new XMLHttpRequest();
+        let url = new URL('http://localhost:7070/');
+        url.searchParams.set('method', 'ticketById');
+        url.searchParams.set('id', id);
+        xhr.open('GET', url);
+        xhr.send();
+
+        xhr.addEventListener('load', () => {
+            if (xhr.status >= 200 && xhr.status < 300) {
+                try {
+                    const data = JSON.parse(xhr.response);
+                    callback(data);
                 } catch (e) {
                     console.error(e);
                 }              
