@@ -1,3 +1,7 @@
+[![Build status](https://ci.appveyor.com/api/projects/status/ts3vsv6302p662fa?svg=true)](https://ci.appveyor.com/project/ajoq/ahj-homeworks-7-http-7-2-front)
+
+https://ajoq.github.io/ahj-homeworks_7-http_7.2_front/
+
 ### HelpDesk: Frontend
 
 #### Легенда
