@@ -1,6 +1,7 @@
 import Ticket from './Ticket';
+import TicketsRequests from './TicketsRequests';
 import Modal from './Modal';
-import createRequest from './createRequest';
+// import createRequest from './createRequest';
 
 export default class Tickets {
   constructor() {
@@ -11,7 +12,7 @@ export default class Tickets {
   }
 
   init() {
-    this.getTickets(this.updateList.bind(this));
+    TicketsRequests.getTickets(this.updateList.bind(this));
     this.events();
   }
 
@@ -51,13 +52,13 @@ export default class Tickets {
 
     switch (method) {
       case 'createTicket':
-        this.createTicket(this.updateList.bind(this));
+        TicketsRequests.createTicket(this.updateList.bind(this));
         break;
       case 'editTicket':
-        this.editTicket(e, this.updateList.bind(this));
+        TicketsRequests.editTicket(e, this.updateList.bind(this));
         break;
       case 'deleteTicket':
-        this.deleteTicket(e, this.updateList.bind(this));
+        TicketsRequests.deleteTicket(e, this.updateList.bind(this));
         break;
       default:
       // do nothing
@@ -66,57 +67,57 @@ export default class Tickets {
     document.querySelector('.btn-close').click();
   }
 
-  createTicket(callback) {
-    createRequest(
-      {
-        methodRequest: 'POST',
-        data: {
-          method: 'createTicket',
-        },
-        callback,
-      },
-      document.forms[0],
-    );
+//   createTicket(callback) {
+//     createRequest(
+//       {
+//         methodRequest: 'POST',
+//         data: {
+//           method: 'createTicket',
+//         },
+//         callback,
+//       },
+//       document.forms[0],
+//     );
 
-    document.forms[0].reset();
-  }
+//     document.forms[0].reset();
+//   }
 
-  deleteTicket(e, callback) {
-    createRequest({
-      methodRequest: 'DELETE',
-      data: {
-        method: 'deleteTicket',
-        id: e.currentTarget.dataset.ticketId,
-      },
-      callback,
-    });
-  }
+//   deleteTicket(e, callback) {
+//     createRequest({
+//       methodRequest: 'DELETE',
+//       data: {
+//         method: 'deleteTicket',
+//         id: e.currentTarget.dataset.ticketId,
+//       },
+//       callback,
+//     });
+//   }
 
-  editTicket(e, callback) {
-    createRequest(
-      {
-        methodRequest: 'POST',
-        data: {
-          method: 'editTicket',
-          id: e.currentTarget.dataset.ticketId,
-        },
-        callback,
-      },
-      document.forms[0],
-    );
+//   editTicket(e, callback) {
+//     createRequest(
+//       {
+//         methodRequest: 'POST',
+//         data: {
+//           method: 'editTicket',
+//           id: e.currentTarget.dataset.ticketId,
+//         },
+//         callback,
+//       },
+//       document.forms[0],
+//     );
 
-    document.forms[0].reset();
-  }
+//     document.forms[0].reset();
+//   }
 
-  getTickets(callback) {
-    createRequest({
-      methodRequest: 'GET',
-      data: {
-        method: 'allTickets',
-      },
-      callback,
-    });
-  }
+//   getTickets(callback) {
+//     createRequest({
+//       methodRequest: 'GET',
+//       data: {
+//         method: 'allTickets',
+//       },
+//       callback,
+//     });
+//   }
 
   getTicketData(e, method) {
     const currentTicketId = e.relatedTarget.closest('.ticket').dataset.id;
