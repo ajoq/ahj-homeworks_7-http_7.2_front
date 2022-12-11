@@ -1,11 +1,12 @@
-export default function createRequest(options = {}, form) {
+/* eslint-disable no-console */
+export default function createRequest(options, form) {
   const xhr = new XMLHttpRequest();
   const url = new URL('http://localhost:7070/');
   let formData;
 
-  for (const key in options.data) {
-    url.searchParams.set(key, options.data[key]);
-  }
+  Object.entries(options.data).forEach((item) => {
+    url.searchParams.set(item[0], item[1]);
+  });
 
   if (options.methodRequest === 'POST') {
     formData = new FormData(form);
