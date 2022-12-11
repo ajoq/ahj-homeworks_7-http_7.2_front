@@ -1,32 +1,32 @@
 export default class Modal {
-    constructor(modal) {
-        this.modal = modal;
-        this.modalTitle = document.getElementById('ticketModalLabel');
-        this.modalBody = document.getElementById('modalBody');
-    }
+  constructor(modal) {
+    this.modal = modal;
+    this.modalTitle = document.getElementById('ticketModalLabel');
+    this.modalBody = document.getElementById('modalBody');
+  }
 
-    showModal(e) {
-        const showBtn = e.relatedTarget;
-        const title = showBtn.dataset.title;
-        this.modalTitle.textContent = title;
+  showModal(e) {
+    const showBtn = e.relatedTarget;
+    const { title } = showBtn.dataset;
+    this.modalTitle.textContent = title;
 
-        this.modalBody.innerHTML = '';
-        const method = showBtn.dataset.method;
+    this.modalBody.innerHTML = '';
+    const { method } = showBtn.dataset;
 
-        this.createContent(method);
-    }
+    this.createContent(method);
+  }
 
-    createContent(method) {
-        let formBody;
+  createContent(method) {
+    let formBody;
 
-        if (method === 'deleteTicket') {
-            formBody = `
+    if (method === 'deleteTicket') {
+      formBody = `
                 <div class="mb-3">
                     <p>Вы уверены, что хотите удалить тикет? Это действие необратимо</p>
                 </div>            
             `;
-        } else {
-            formBody = `
+    } else {
+      formBody = `
             <div class="mb-3">
                 <label for="ticketName" class="form-label">Краткое описание</label>
                 <input type="text" name="name" class="form-control" id="ticketName" required>
@@ -35,10 +35,10 @@ export default class Modal {
                 <label for="ticketDescription" class="form-label">Подробное описание</label>
                 <textarea class="form-control" name="description" id="ticketDescription" rows="3"></textarea>
             </div>        
-            `
-        }
+            `;
+    }
 
-        const form = `
+    const form = `
             <form data-method="${method}">
                 ${formBody}
                 <div class="modal-footer">
@@ -48,6 +48,6 @@ export default class Modal {
             </form>        
         `;
 
-        this.modalBody.insertAdjacentHTML('beforeend', form);
-    }
+    this.modalBody.insertAdjacentHTML('beforeend', form);
+  }
 }

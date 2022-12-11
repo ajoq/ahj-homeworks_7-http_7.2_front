@@ -1,20 +1,20 @@
 export default class Ticket {
-    static createTicket(item) {
-        const ticketDiv = document.createElement('div');
-        ticketDiv.className = 'ticket row border p-3 bg-white';
-        ticketDiv.dataset.id = item.id;
+  static createTicket(item) {
+    const ticketDiv = document.createElement('div');
+    ticketDiv.className = 'ticket row border p-3 bg-white';
+    ticketDiv.dataset.id = item.id;
 
-        const ticketStatusDiv = document.createElement('div');
-        ticketStatusDiv.className = 'ticket-status col-md-1 text-center';
+    const ticketStatusDiv = document.createElement('div');
+    ticketStatusDiv.className = 'ticket-status col-md-1 text-center';
 
-        const ticketStatusInput = document.createElement('input');
-        ticketStatusInput.className = 'form-check-input';
-        ticketStatusInput.type = 'checkbox';
-        ticketStatusInput.checked = item.status;
+    const ticketStatusInput = document.createElement('input');
+    ticketStatusInput.className = 'form-check-input';
+    ticketStatusInput.type = 'checkbox';
+    ticketStatusInput.checked = item.status;
 
-        ticketStatusDiv.append(ticketStatusInput);
+    ticketStatusDiv.append(ticketStatusInput);
 
-        const ticketData = `
+    const ticketData = `
             <div class="ticket-text col-md">
                 <div class="ticket-text__name col-md-12">${item.name}</div>
                 <div class="ticket-text__detail col-md-12 mt-2 visually-hidden"></div>                            
@@ -38,17 +38,17 @@ export default class Ticket {
                 </div>
             </div>            
         `;
-        ticketDiv.append(ticketStatusDiv);
-        ticketDiv.insertAdjacentHTML('beforeend', ticketData);
-        
-        return ticketDiv;
-    }
+    ticketDiv.append(ticketStatusDiv);
+    ticketDiv.insertAdjacentHTML('beforeend', ticketData);
 
-    static spinner() {
-        return `
+    return ticketDiv;
+  }
+
+  static spinner() {
+    return `
             <div class="spinner-border spinner-border-sm" role="status">
                 <span class="visually-hidden">Загрузка...</span>
             </div>             
         `;
-    }
-};
+  }
+}
