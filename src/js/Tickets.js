@@ -1,5 +1,6 @@
 import Ticket from "./Ticket";
 import Modal from "./Modal";
+import createRequest from "./createRequest";
 
 export default class Tickets {
     constructor() {
@@ -10,7 +11,7 @@ export default class Tickets {
     }
 
     init() {
-        this.getTickets();
+        this.getTickets(this.updateList.bind(this));
         this.events();
     }
 
@@ -39,128 +40,79 @@ export default class Tickets {
         };
 
         if (e.target.closest('.form-check-input')) {
-            this.updateTicketStatus(currentTicketId);
+            this.updateTicketStatus(currentTicketId, this.updateList.bind(this));
             return;
         }
     }
 
     submitMethod(e) {
         e.preventDefault();
-        console.log('Произошло событие submit');
 
         const method = e.target.dataset.method;
 
         switch(method) {
             case 'createTicket':
-                this.createTicket();
+                this.createTicket(this.updateList.bind(this));
                 break;
             case 'editTicket':
-                this.editTicket(e);
+                this.editTicket(e, this.updateList.bind(this));
                 break;
             case 'deleteTicket':                
-                this.deleteTicket(e);
+                this.deleteTicket(e, this.updateList.bind(this));
                 break;                
         }
 
         document.querySelector('.btn-close').click();
     }
 
-    createTicket() {
-        console.log('Добавляем тикет');
+    createTicket(callback) {
+        createRequest({
+            methodRequest: 'POST',
+            data: {
+                method: 'createTicket',
+            },
+            callback,
+          },
+          document.forms[0],
+          );
 
-        let formData = new FormData(document.forms[0]);
-        let xhr = new XMLHttpRequest();
-        let url = new URL('http://localhost:7070/');
-        url.searchParams.set('method', 'createTicket');
-        xhr.open('POST', url);
-        xhr.send(formData);
-
-        document.forms[0].reset();
-
-        xhr.addEventListener('load', () => {
-            if (xhr.status >= 200 && xhr.status < 300) {
-                try {
-                    const data = JSON.parse(xhr.response);
-                    console.log(data);
-                    this.updateList(data);
-                } catch (e) {
-                    console.error(e);
-                }              
-            }
-        });
+          document.forms[0].reset();
     }
 
-    deleteTicket(e) {
-        console.log('Удаляем тикет');
-
-        const currentTicketId = e.currentTarget.dataset.ticketId;
-
-        let xhr = new XMLHttpRequest();
-        let url = new URL('http://localhost:7070/');
-        url.searchParams.set('method', 'deleteTicket');
-        url.searchParams.set('id', currentTicketId);
-        xhr.open('DELETE', url);
-        xhr.send();
-
-        xhr.addEventListener('load', () => {
-            if (xhr.status >= 200 && xhr.status < 300) {
-                try {
-                    const data = JSON.parse(xhr.response);
-                    this.updateList(data);
-                } catch (e) {
-                    console.error(e);
-                }              
-            }
-        });
+    deleteTicket(e, callback) {
+        createRequest({
+            methodRequest: 'DELETE',
+            data: {
+                method: 'deleteTicket',
+                id: e.currentTarget.dataset.ticketId,
+            },
+            callback,
+          });
     }
 
-    editTicket(e) {
-        console.log('Редактируем тикет');
-
-        const currentTicketId = e.currentTarget.dataset.ticketId;
-
-        let formData = new FormData(document.forms[0]);
-
-        formData.append('id', currentTicketId);
-
-        let xhr = new XMLHttpRequest();
-        let url = new URL('http://localhost:7070/');
-        url.searchParams.set('method', 'editTicket');
-        xhr.open('POST', url);
-        xhr.send(formData);
-
-        document.forms[0].reset();
-
-        xhr.addEventListener('load', () => {
-            if (xhr.status >= 200 && xhr.status < 300) {
-                try {
-                    const data = JSON.parse(xhr.response);
-                    this.updateList(data);
-                } catch (e) {
-                    console.error(e);
-                }              
-            }
-        });
+    editTicket(e, callback) {
+        createRequest({
+            methodRequest: 'POST',
+            data: {
+                method: 'editTicket',
+                id: e.currentTarget.dataset.ticketId,
+            },
+            callback,
+          },
+          document.forms[0],
+          );
+          
+          document.forms[0].reset();
     }
 
-    getTickets() {
-        let xhr = new XMLHttpRequest();
-        let url = new URL('http://localhost:7070/');
-        url.searchParams.set('method', 'allTickets');
-        xhr.open('GET', url);
-        xhr.send();
-
-        xhr.addEventListener('load', () => {
-            if (xhr.status >= 200 && xhr.status < 300) {
-                try {
-                    const data = JSON.parse(xhr.response);
-                    console.log(data);
-                    this.updateList(data);
-                } catch (e) {
-                    console.error(e);
-                }              
-            }
-        });
+    getTickets(callback) {
+        createRequest({
+            methodRequest: 'GET',
+            data: {
+                method: 'allTickets',
+            },
+            callback,
+          });
     }
 
     getTicketData(e, method) {
@@ -203,45 +155,25 @@ export default class Tickets {
     }
 
     ticketById(id, callback) {
-        let xhr = new XMLHttpRequest();
-        let url = new URL('http://localhost:7070/');
-        url.searchParams.set('method', 'ticketById');
-        url.searchParams.set('id', id);
-        xhr.open('GET', url);
-        xhr.send();
-
-        xhr.addEventListener('load', () => {
-            if (xhr.status >= 200 && xhr.status < 300) {
-                try {
-                    const data = JSON.parse(xhr.response);
-                    callback(data);
-                } catch (e) {
-                    console.error(e);
-                }              
-            }
-        });
+        createRequest({
+            methodRequest: 'GET',
+            data: {
+                method: 'ticketById',
+                id: id,
+            },
+            callback,
+          });
     }
 
-    updateTicketStatus(id) {
-        console.log('Статус тикета изменился');
-
-        let xhr = new XMLHttpRequest();
-        let url = new URL('http://localhost:7070/');
-        url.searchParams.set('method', 'updateStatus');
-        url.searchParams.set('id', id);
-        xhr.open('GET', url);
-        xhr.send();
-
-        xhr.addEventListener('load', () => {
-            if (xhr.status >= 200 && xhr.status < 300) {
-                try {
-                    const data = JSON.parse(xhr.response);
-                    this.updateList(data);
-                } catch (e) {
-                    console.error(e);
-                }              
-            }
-        });
+    updateTicketStatus(id, callback) {
+        createRequest({
+            methodRequest: 'GET',
+            data: {
+                method: 'updateStatus',
+                id: id,
+            },
+            callback,
+          });
     }
 
     updateList(data) {
