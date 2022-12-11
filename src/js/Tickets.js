@@ -1,7 +1,6 @@
+import Modal from './Modal';
 import Ticket from './Ticket';
 import TicketsRequests from './TicketsRequests';
-import Modal from './Modal';
-// import createRequest from './createRequest';
 
 export default class Tickets {
   constructor() {
@@ -22,7 +21,7 @@ export default class Tickets {
 
       const { method } = document.forms[0].dataset;
       if (method === 'editTicket' || method === 'deleteTicket') {
-        this.getTicketData(e, method);
+        Ticket.getTicketData(e, method);
       }
 
       document.forms[0].addEventListener('submit', (evt) => this.submitMethod(evt));
@@ -36,12 +35,12 @@ export default class Tickets {
     const currentTicketId = currentTicket.dataset.id;
 
     if (e.target.closest('.ticket-text__name')) {
-      this.showTicketDescription(currentTicket, currentTicketId);
+      Ticket.showTicketDescription(currentTicket, currentTicketId);
       return;
     }
 
     if (e.target.closest('.form-check-input')) {
-      this.updateTicketStatus(currentTicketId, this.updateList.bind(this));
+      TicketsRequests.updateTicketStatus(currentTicketId, this.updateList.bind(this));
     }
   }
 
@@ -65,116 +64,6 @@ export default class Tickets {
     }
 
     document.querySelector('.btn-close').click();
-  }
-
-//   createTicket(callback) {
-//     createRequest(
-//       {
-//         methodRequest: 'POST',
-//         data: {
-//           method: 'createTicket',
-//         },
-//         callback,
-//       },
-//       document.forms[0],
-//     );
-
-//     document.forms[0].reset();
-//   }
-
-//   deleteTicket(e, callback) {
-//     createRequest({
-//       methodRequest: 'DELETE',
-//       data: {
-//         method: 'deleteTicket',
-//         id: e.currentTarget.dataset.ticketId,
-//       },
-//       callback,
-//     });
-//   }
-
-//   editTicket(e, callback) {
-//     createRequest(
-//       {
-//         methodRequest: 'POST',
-//         data: {
-//           method: 'editTicket',
-//           id: e.currentTarget.dataset.ticketId,
-//         },
-//         callback,
-//       },
-//       document.forms[0],
-//     );
-
-//     document.forms[0].reset();
-//   }
-
-//   getTickets(callback) {
-//     createRequest({
-//       methodRequest: 'GET',
-//       data: {
-//         method: 'allTickets',
-//       },
-//       callback,
-//     });
-//   }
-
-  getTicketData(e, method) {
-    const currentTicketId = e.relatedTarget.closest('.ticket').dataset.id;
-    e.target.querySelector('form').dataset.ticketId = currentTicketId;
-
-    if (method !== 'editTicket') return;
-
-    this.ticketById(currentTicketId, (data) => {
-      const { name, description } = data;
-      document.forms[0].name.value = name;
-      document.forms[0].description.value = description;
-    });
-  }
-
-  showTicketDescription(ticket, id) {
-    const detailDesc = ticket.querySelector('.ticket-text__detail');
-    detailDesc.classList.toggle('visually-hidden');
-
-    if (detailDesc.textContent !== '') return;
-
-    this.ticketById(id, (data) => {
-      const spinner = Ticket.spinner();
-      const { description } = data;
-
-      if (!description) {
-        detailDesc.textContent = 'Описание задачи отсутствует';
-        return;
-      }
-
-      detailDesc.innerHTML = spinner;
-      setTimeout(() => {
-        detailDesc.innerHTML = '';
-        detailDesc.textContent = description;
-      }, 1000);
-    });
-  }
-
-  ticketById(id, callback) {
-    createRequest({
-      methodRequest: 'GET',
-      data: {
-        method: 'ticketById',
-        id,
-      },
-      callback,
-    });
-  }
-
-  updateTicketStatus(id, callback) {
-    createRequest({
-      methodRequest: 'GET',
-      data: {
-        method: 'updateStatus',
-        id,
-      },
-      callback,
-    });
   }
 
   updateList(data) {

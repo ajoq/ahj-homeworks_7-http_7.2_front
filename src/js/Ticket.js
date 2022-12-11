@@ -1,3 +1,5 @@
+import TicketsRequests from './TicketsRequests';
+
 export default class Ticket {
   static createTicket(item) {
     const ticketDiv = document.createElement('div');
@@ -50,5 +52,41 @@ export default class Ticket {
                 <span class="visually-hidden">Загрузка...</span>
             </div>             
         `;
+  }
+
+  static getTicketData(e, method) {
+    const currentTicketId = e.relatedTarget.closest('.ticket').dataset.id;
+    e.target.querySelector('form').dataset.ticketId = currentTicketId;
+
+    if (method !== 'editTicket') return;
+
+    TicketsRequests.ticketById(currentTicketId, (data) => {
+      const { name, description } = data;
+      document.forms[0].name.value = name;
+      document.forms[0].description.value = description;
+    });
+  }
+
+  static showTicketDescription(ticket, id) {
+    const detailDesc = ticket.querySelector('.ticket-text__detail');
+    detailDesc.classList.toggle('visually-hidden');
+
+    if (detailDesc.textContent !== '') return;
+
+    TicketsRequests.ticketById(id, (data) => {
+      const spinner = Ticket.spinner();
+      const { description } = data;
+
+      if (!description) {
+        detailDesc.textContent = 'Описание задачи отсутствует';
+        return;
+      }
+
+      detailDesc.innerHTML = spinner;
+      setTimeout(() => {
+        detailDesc.innerHTML = '';
+        detailDesc.textContent = description;
+      }, 1000);
+    });
   }
 }
