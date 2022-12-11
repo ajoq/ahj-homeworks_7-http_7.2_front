@@ -129,28 +129,25 @@ export default class Tickets {
     }
 
     showTicketDescription(ticket, id) {
-        const currentTicket = ticket;
-        const currentTicketId = id;
-
-        const detailDesc = currentTicket.querySelector('.ticket-text__detail');
+        const detailDesc = ticket.querySelector('.ticket-text__detail');
         detailDesc.classList.toggle('visually-hidden');
 
         if (detailDesc.textContent != '') return;
 
-        const spinner = `
-            <div class="spinner-border spinner-border-sm" role="status">
-                <span class="visually-hidden">Загрузка...</span>
-            </div>        
-        `;
-
-        detailDesc.innerHTML = spinner;
-
-        this.ticketById(currentTicketId, (data) => {
+        this.ticketById(id, (data) => {
+            const spinner = Ticket.spinner();
             const { description } = data;
+            
+            if (!description) {
+                detailDesc.textContent = 'Описание задачи отсутствует';
+                return;
+            }
+
+            detailDesc.innerHTML = spinner;
             setTimeout(() => {
                 detailDesc.innerHTML = '';
-                detailDesc.textContent = description
-            }, 2000);
+                detailDesc.textContent = description;
+            }, 1000);
         });
     }
 
