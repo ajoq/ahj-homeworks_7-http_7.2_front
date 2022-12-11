@@ -1,3 +1,4 @@
-.ticket-text__name {
+.ticket-text__name,
+.form-check-input {
     cursor: pointer;
 }

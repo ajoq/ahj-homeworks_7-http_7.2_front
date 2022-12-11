@@ -26,7 +26,22 @@ export default class Tickets {
             document.forms[0].addEventListener('submit', (e) => this.submitMethod(e));
         });
 
-        this.ticketsList.addEventListener('click', (e) => this.showTicketDescription(e));
+        this.ticketsList.addEventListener('click', (e) => this.ticketEvents(e));
+    }
+
+    ticketEvents(e) {
+        const currentTicket = e.target.closest('.ticket');
+        const currentTicketId = currentTicket.dataset.id;
+
+        if (e.target.closest('.ticket-text__name')) {
+            this.showTicketDescription(currentTicket, currentTicketId);
+            return;
+        };
+
+        if (e.target.closest('.form-check-input')) {
+            this.updateTicketStatus(currentTicketId);
+            return;
+        }
     }
 
     submitMethod(e) {
@@ -161,18 +176,14 @@ export default class Tickets {
         });
     }
 
-    showTicketDescription(e) {
-        const ticketName = e.target.closest('.ticket-text__name');
-        if (!ticketName) return;
-
-        const currentTicket = e.target.closest('.ticket');
+    showTicketDescription(ticket, id) {
+        const currentTicket = ticket;
+        const currentTicketId = id;
 
         const detailDesc = currentTicket.querySelector('.ticket-text__detail');
         detailDesc.classList.toggle('visually-hidden');
 
         if (detailDesc.textContent != '') return;
-
-        const currentTicketId = currentTicket.dataset.id;
 
         const spinner = `
             <div class="spinner-border spinner-border-sm" role="status">
@@ -181,7 +192,6 @@ export default class Tickets {
         `;
 
         detailDesc.innerHTML = spinner;
-
 
         this.ticketById(currentTicketId, (data) => {
             const { description } = data;
@@ -205,6 +215,28 @@ export default class Tickets {
                 try {
                     const data = JSON.parse(xhr.response);
                     callback(data);
+                } catch (e) {
+                    console.error(e);
+                }              
+            }
+        });
+    }
+
+    updateTicketStatus(id) {
+        console.log('Статус тикета изменился');
+
+        let xhr = new XMLHttpRequest();
+        let url = new URL('http://localhost:7070/');
+        url.searchParams.set('method', 'updateStatus');
+        url.searchParams.set('id', id);
+        xhr.open('GET', url);
+        xhr.send();
+
+        xhr.addEventListener('load', () => {
+            if (xhr.status >= 200 && xhr.status < 300) {
+                try {
+                    const data = JSON.parse(xhr.response);
+                    this.updateList(data);
                 } catch (e) {
                     console.error(e);
                 }              
